@@ -1,11 +1,14 @@
+from typing import Tuple
 import argparse
 
 from langchain_community.llms import Ollama
 from rich.console import Console
 from rich.markdown import Markdown
+from typeguard import typechecked
 
 
-def parse_arguments():
+@typechecked
+def parse_arguments() -> Tuple[str, str]:
     parser = argparse.ArgumentParser(description="Chat with an LLM model")
     parser.add_argument("model", type=str, help="The name of the model to use")
     parser.add_argument("question", type=str, help="The question to ask the model")
@@ -13,7 +16,8 @@ def parse_arguments():
     return args.model, args.question
 
 
-def chat_with(llm, prompt):
+@typechecked
+def chat_with(llm: Ollama, prompt: str) -> str:
     return llm.invoke(prompt)
 
 

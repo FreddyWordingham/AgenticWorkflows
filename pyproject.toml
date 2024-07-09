@@ -10,6 +10,7 @@ python = "^3.10"
 langchain = "^0.2.7"
 langchain-community = "^0.2.7"
 rich = "^13.7.1"
+typeguard = "^4.3.0"
 
 [build-system]
 requires = ["poetry-core"]
