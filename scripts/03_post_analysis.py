@@ -1,10 +1,11 @@
+from operator import itemgetter
 from typing import Tuple
 import argparse
 
 from langchain_community.llms import Ollama
-from langchain.chains import SequentialChain
 from langchain.prompts import PromptTemplate
 from langchain.schema.output_parser import StrOutputParser
+from langchain.schema.runnable import RunnablePassthrough
 from rich.console import Console
 from rich.markdown import Markdown
 from typeguard import typechecked
@@ -23,44 +24,47 @@ if __name__ == "__main__":
     # Read command line arguments
     model, question = parse_arguments()
 
-    # Create a console object for formatting output
-    console = Console()
-
-    # Template
-    template_1 = """{question}"""
-    prompt_template_1 = PromptTemplate(
-        template=template_1, input_variables=["question"]
-    )
-
-    template_2 = """
-    First, analyse the reply: "{answer}" to the question: "{question}".
-    Then, give me a rating out of five for how well the reply answers the question.
-    Only use whole numbers, and do not include any other text or information in your reply.
-    For example, return "3" if you think the reply is a 3 out of 5.
-    """
-    prompt_template_2 = PromptTemplate(
-        template=template_2, input_variables=["question", "answer"]
-    )
-
     # Model
     llm = Ollama(model=model)
 
-    # # Chain
-    chain_1 = (
-        prompt_template_1
-        | llm
-        | {"answer": StrOutputParser(), "question": StrOutputParser()}
-    )
-    chain_2 = prompt_template_2 | llm | {"rating": StrOutputParser()}
-    chain = chain_1 | chain_2
+    # Chains
+    template_1 = """
+    Answer the following question as briefly as possible:
+    Question: {question}
+    Answer:
+    """
+    prompt_template_1 = PromptTemplate(template=template_1, input_variables=["question"])
+    chain_1 = prompt_template_1 | llm | StrOutputParser()
 
-    # Run the query
-    response = chain.invoke({"question": question})
+    template_2 = """
+    First, analyse the reply: "{answer}" to the question: "{question}".
+    Then, give me a rating out of five for how well the reply answers the question,
+    consider only how scientifically accurate the reply is.
+    Give only the numerical value, like "2/5" or "5/5".
+    GIVE NO OTHER INFORMATION, CONTEXT OR EXPLANATION!
+    Rating:
+    """
+    prompt_template_2 = PromptTemplate(template=template_2, input_variables=["question", "answer"])
+    chain_2 = prompt_template_2 | llm | StrOutputParser()
 
-    from pprint import pprint
+    # Sequential Chain
+    chain = {
+        "question": itemgetter("question"),
+        "answer": chain_1,
+    } | RunnablePassthrough.assign(rating=chain_2)
 
-    pprint(response)
+    # Run
+    result = chain.invoke({"question": question})
 
-    # # Print the response
-    # console.print(Markdown(response.get("answer")))
-    # console.print(Markdown(response.get("rating")))
+    # Format the results into the final output
+    output = f"""
+Q: {result.get("question")}
+
+A: {result.get("answer")}
+
+Rating: {result.get("rating")}
+"""
+
+    # Create a console object for formatting output
+    console = Console()
+    console.print(Markdown(output))

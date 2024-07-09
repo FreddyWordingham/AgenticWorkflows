@@ -52,7 +52,7 @@ if __name__ == "__main__":
     # Run
     result = chain.invoke({"a": 2, "b": 3})
 
-    # Format results into final output
+    # Format results into the final output
     output = f"""# Values
 | variable | value |
 | -------- | ----- |
@@ -64,7 +64,8 @@ if __name__ == "__main__":
 # Results
 {result.get("a")} + {result.get("b")} = {result.get("c")}
 
-{result.get("a")} * {result.get("c")} = {result.get("d")}"""
+{result.get("a")} * {result.get("c")} = {result.get("d")}
+"""
 
     # Create a console object for formatting output
     console = Console()
