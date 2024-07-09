@@ -42,7 +42,7 @@ ollama run <model>
 Then, in another terminal, run the desired workflow passing the name of the model you selected in the last step:
 
 ```bash
-poetry run python scripts/<workflow>.py --model <model>
+poetry run python scripts/<workflow>.py <model> <question>
 ```
 
-> For example: `poetry run python scripts/chatbot.py --model phi3`.
+> For example: `poetry run python scripts/01_basic_single_question.py phi3 "Write me a Rust bubble sort algorithm"`.
