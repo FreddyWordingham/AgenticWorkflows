@@ -2,6 +2,7 @@ from typing import Tuple
 import argparse
 
 from langchain_community.llms import Ollama
+from langchain.prompts import PromptTemplate
 from rich.console import Console
 from rich.markdown import Markdown
 from typeguard import typechecked
@@ -28,9 +29,14 @@ if __name__ == "__main__":
     # Create a console object for formatting output
     console = Console()
 
+    # Define a template for the prompt
+    template = """{question}"""
+    prompt_template = PromptTemplate(template=template, input_variables=["question"])
+
     # Run the query
     llm = Ollama(model=model)
-    response = chat_with(llm, question)
+    prompt = prompt_template.format(question=question)
+    response = chat_with(llm, prompt)
 
     # Print the response
     console.print(Markdown(response))
