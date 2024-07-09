@@ -3,6 +3,7 @@ import argparse
 
 from langchain_community.llms import Ollama
 from langchain.prompts import PromptTemplate
+from langchain.schema.output_parser import StrOutputParser
 from rich.console import Console
 from rich.markdown import Markdown
 from typeguard import typechecked
@@ -29,14 +30,22 @@ if __name__ == "__main__":
     # Create a console object for formatting output
     console = Console()
 
-    # Define a template for the prompt
-    template = """{question}"""
-    prompt_template = PromptTemplate(template=template, input_variables=["question"])
+    # Template
+    prompt_template = PromptTemplate(
+        template="{question}", input_variables=["question"]
+    )
+
+    # Model
+    llm = Ollama(model=model)
+
+    # Output
+    output_parser = StrOutputParser()
+
+    # # Chain
+    chain = prompt_template | llm | {"answer": output_parser}
 
     # Run the query
-    llm = Ollama(model=model)
-    prompt = prompt_template.format(question=question)
-    response = chat_with(llm, prompt)
+    response = chain.invoke({"question": question})
 
     # Print the response
-    console.print(Markdown(response))
+    console.print(Markdown(response.get("answer")))
