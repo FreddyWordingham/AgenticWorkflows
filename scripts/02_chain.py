@@ -1,5 +1,4 @@
 from operator import itemgetter
-from typing import Tuple
 import argparse
 
 from langchain_community.llms import Ollama
@@ -29,7 +28,7 @@ if __name__ == "__main__":
     # Chains
     template_1 = """
     How much is {a} + {b}?
-    Answer with only the result of the sum.
+    Answer with only the result of the sum, written in numerical form, without any padding.
     Result:
     """
     prompt_template_1 = PromptTemplate(template=template_1, input_variables=["a", "b"])
@@ -37,7 +36,7 @@ if __name__ == "__main__":
 
     template_2 = """
     How much is {a} multiplied by {c}?
-    Answer with only the result of the sum.
+    Answer with only the result of the sum, written in numerical form, without any padding.
     Result:
     """
     prompt_template_2 = PromptTemplate(template=template_2, input_variables=["a", "c"])
@@ -69,5 +68,4 @@ if __name__ == "__main__":
 
     # Create a console object for formatting output
     console = Console()
-    print(output)
     console.print(Markdown(output))
