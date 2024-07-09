@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.10"
 langchain = "^0.2.7"
 langchain-community = "^0.2.7"
+rich = "^13.7.1"
 
 [build-system]
 requires = ["poetry-core"]

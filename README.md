@@ -30,3 +30,19 @@ Then, use `Poetry` to install the required dependencies:
 poetry env use python3.10
 poetry install
 ```
+
+## Usage
+
+In one terminal, start a local model running:
+
+```bash
+ollama run <model>
+```
+
+Then, in another terminal, run the desired workflow passing the name of the model you selected in the last step:
+
+```bash
+poetry run python scripts/<workflow>.py --model <model>
+```
+
+> For example: `poetry run python scripts/chatbot.py --model phi3`.
