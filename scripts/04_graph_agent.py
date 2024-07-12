@@ -15,14 +15,13 @@ def chatbot(state: State):
 
 
 if __name__ == "__main__":
-    print("Hello, world!")
-
-    graph_builder = StateGraph(State)
 
     # Model
     llm = Ollama(model="phi3")
 
     # Graph
+    graph_builder = StateGraph(State)
+
     graph_builder.add_node("chatbot", chatbot)
 
     graph_builder.set_entry_point("chatbot")
