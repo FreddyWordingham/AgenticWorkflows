@@ -176,6 +176,3 @@ pyrightconfig.json
 
 # MacOS
 .DS_Store
-
-# Poetry lock
-poetry.lock
