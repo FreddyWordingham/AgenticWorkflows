@@ -1,0 +1,47 @@
+name: Badges
+
+on:
+  repository_dispatch:
+    types: [badges_trigger]
+
+concurrency:
+  group: badge_updates
+  cancel-in-progress: true
+
+jobs:
+  update_badges:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Update Badges
+        run: sh ./ci/update_badges.sh
+
+      - name: Commit Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add README.md
+          git commit -m "Update README with new badges: Coverage $COVERAGE_PERCENT%, Complexity $COMPLEXITY_SCORE, Maintainability $MAINTAINABILITY_SCORE" || echo "No changes to commit"
+
+      - name: Pull Latest Changes
+        run: |
+          git fetch origin ${{ github.ref_name }}
+          git merge origin/${{ github.ref_name }} --no-ff  # Merging the changes with a merge commit
+
+      - name: Push Changes
+        run: |
+          git push origin ${{ github.ref_name }}

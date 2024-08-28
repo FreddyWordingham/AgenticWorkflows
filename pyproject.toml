@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "agenticworkflows"
+name = "agentic-workflows"
 version = "0.0.0"
 description = "A small example package of LLM powered agentic workflows"
 authors = ["Freddy Wordingham <freddy@digilab.co.uk>"]

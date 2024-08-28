@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  continuous_integration:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+
+      - name: Cache Poetry virtual environment
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pypoetry/virtualenvs
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Run static analysis
+        run: sh ./ci/run_check.sh
+
+      - name: Run tests
+        run: sh ./ci/run_tests.sh
+
+      - name: Run linting checks
+        run: sh ./ci/run_linter.sh
+
+      - name: Run formatting checks
+        run: sh ./ci/run_formatter.sh
+
+      - name: Trigger Badges Workflow
+        if: success() # Ensures this runs only if all previous steps succeeded
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.PAT }}
+          repository: ${{ github.repository }}
+          event-type: badges_trigger
