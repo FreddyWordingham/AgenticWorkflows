@@ -1,18 +1,12 @@
 [tool.poetry]
 name = "agenticworkflows"
 version = "0.0.0"
-description = ""
+description = "A small example package of LLM powered agentic workflows"
 authors = ["Freddy Wordingham <freddy@digilab.co.uk>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.13"
-langchain = "^0.2.7"
-langchain-openai = "^0.1.15"
-langchain-community = "^0.2.7"
-unstructured = "^0.14.10"
-markdown = "^3.6"
-rich = "^13.7.1"
 
 [build-system]
 requires = ["poetry-core"]
