@@ -9,7 +9,7 @@
 </p>
 
 ![Version Badge](https://img.shields.io/badge/version-1.0.0-gold)
-[![CI](https://github.com/digiLab-ai/Koyo/actions/workflows/schema_ci.yml/badge.svg)](https://github.com/digiLab-ai/Koyo/actions/workflows/schema_ci.yml)
+[![CI](https://github.com/FreddyWordingham/AgenticWorkflows/actions/workflows/ci.yml/badge.svg)](https://github.com/FreddyWordingham/AgenticWorkflows/actions/workflows/ci.yml)
 ![Coverage Badge](https://img.shields.io/badge/test_coverage-93%25-brightgreen)
 ![Complexity Badge](https://img.shields.io/badge/complexity-A-cyan)
 ![Maintainability Badge](https://img.shields.io/badge/maintainability-99.7806%25-blue)
