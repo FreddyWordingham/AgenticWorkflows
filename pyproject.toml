@@ -8,6 +8,10 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = ">=3.10,<3.13"
 langgraph = "^0.2.14"
+rich = "^13.8.0"
+langchain-ollama = "^0.1.2"
+langchain-community = "^0.2.14"
+python-dotenv = "^1.0.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.8.0"
